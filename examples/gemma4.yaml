@@ -1,0 +1,15 @@
+modules:
+  text_decoder:
+    models:
+      - model: google/gemma-4-31b-it
+        parameters:
+          weight: 1
+          density: 1
+
+merge_method: ties
+base_model: google/gemma-4-31b
+parameters:
+  normalize: true
+  int8_mask: true
+tokenizer_source: google/gemma-4-31b
+dtype: bfloat16

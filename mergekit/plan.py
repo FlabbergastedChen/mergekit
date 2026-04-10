@@ -169,7 +169,7 @@ class MergePlanner:
                 index = LoaderCache().get(model).index
                 if any(
                     name in index.tensor_paths
-                    for name in [w_in.name] + (w_in.aliases or [])
+                    for name in ([w_in.name] + list(w_in.aliases or ()))
                 ):
                     any_weight = True
                     break

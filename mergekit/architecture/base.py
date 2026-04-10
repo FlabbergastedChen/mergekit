@@ -4,6 +4,7 @@
 from abc import ABC, abstractmethod
 from typing import Dict, List, Optional, Tuple
 
+import torch
 from pydantic import BaseModel, Field
 from transformers import PretrainedConfig
 
@@ -151,3 +152,9 @@ class ConfiguredModelArchitecture(BaseModel, frozen=True, arbitrary_types_allowe
             config=self.config,
             weight_prefix=self.info.modules[module_name].weight_prefix,
         )
+
+
+# Resolve forward refs for environments where pydantic/transformers interaction
+# leaves BaseModel schemas in an incomplete state.
+ConfiguredModuleArchitecture.model_rebuild(_types_namespace={"torch": torch})
+ConfiguredModelArchitecture.model_rebuild(_types_namespace={"torch": torch})
