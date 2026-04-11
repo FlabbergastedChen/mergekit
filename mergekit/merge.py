@@ -138,18 +138,46 @@ def run_merge(
         options=options,
     )
 
+    fill_source = None
     if getattr(arch_info, "post_fill_parameters", False):
+        fill_source = arch_info.post_fill_parameters
+    elif merge_config.base_model and merge_config.modules:
+        requested_modules = set(merge_config.modules.keys())
+        available_modules = set(arch_info.modules.keys())
+        # When only a subset of modules is merged (e.g. text-only on a VLM),
+        # auto-fill missing parameters from base_model so output remains loadable.
+        if requested_modules != available_modules:
+            fill_source = merge_config.base_model.model.path
+
+    if fill_source:
         from mergekit.scripts.fill_missing_params import copy_and_fill_missing_params
 
         logging.info(
-            f"Filling missing parameters from base model {arch_info.post_fill_parameters} into new directory"
+            f"Filling missing parameters from base model {fill_source} into output directory"
         )
+        fill_tmp = out_path + ".fill_tmp"
+        fill_backup = out_path + ".fill_backup"
+        if os.path.exists(fill_tmp):
+            shutil.rmtree(fill_tmp)
+        if os.path.exists(fill_backup):
+            shutil.rmtree(fill_backup)
+
         copy_and_fill_missing_params(
-            base_model_repo_id=arch_info.post_fill_parameters,
+            base_model_repo_id=fill_source,
             sub_model_dir=out_path,
+            output_dir=fill_tmp,
         )
-        logging.info("Deleting initial merge directory: " + out_path)
-        shutil.rmtree(out_path)
+        try:
+            shutil.move(out_path, fill_backup)
+            shutil.move(fill_tmp, out_path)
+            shutil.rmtree(fill_backup)
+        except Exception:
+            if os.path.exists(fill_backup) and not os.path.exists(out_path):
+                shutil.move(fill_backup, out_path)
+            raise
+        finally:
+            if os.path.exists(fill_tmp):
+                shutil.rmtree(fill_tmp)
 
 
 def _set_chat_template(
