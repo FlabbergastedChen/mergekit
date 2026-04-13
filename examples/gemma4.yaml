@@ -5,7 +5,6 @@ modules:
         parameters:
           weight: 1
           density: 1
-    models:
       - model: /home/ubisec/cjr/models/google/gemma-4-31B-it
         parameters:
           weight: 1
