@@ -1,0 +1,9 @@
+modules:
+  text_decoder:
+    models:
+      - model: /home/ubisec/cjr/models/google/gemma-4-31B-it
+
+merge_method: passthrough
+base_model: /home/ubisec/cjr/models/google/gemma-4-31B
+tokenizer_source: /home/ubisec/cjr/models/google/gemma-4-31B-it
+dtype: bfloat16
