@@ -136,7 +136,7 @@ def _template_substitution(
     return TemplateWithArithmetic(template).substitute(substitutions)
 
 
-def _load_architeacture_json(text: str) -> ModelArchitecture:
+def _load_architecture_json(text: str) -> ModelArchitecture:
     data = json.loads(text)
     kind = data.get("kind", "module")
     if kind == "modular":
