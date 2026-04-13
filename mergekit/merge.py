@@ -117,6 +117,7 @@ def run_merge(
         LOG.info("Saving tokenizer")
         _set_chat_template(tokenizer, merge_config)
         tokenizer.save_pretrained(out_path, safe_serialization=True)
+        _write_chat_template_jinja(tokenizer, out_path)
     else:
         if options.copy_tokenizer:
             try:
@@ -305,6 +306,20 @@ def _copy_tokenizer(
     )
     _set_chat_template(tokenizer, merge_config)
     tokenizer.save_pretrained(out_path, safe_serialization=True)
+    _write_chat_template_jinja(tokenizer, out_path)
+
+
+def _write_chat_template_jinja(
+    tokenizer: transformers.PreTrainedTokenizerBase, out_path: str
+):
+    template = tokenizer.chat_template
+    if isinstance(template, dict):
+        template = template.get("default")
+    if not template:
+        return
+
+    with open(os.path.join(out_path, "chat_template.jinja"), "w", encoding="utf-8") as fp:
+        fp.write(template.strip() + "\n")
 
 
 def _model_out_config(

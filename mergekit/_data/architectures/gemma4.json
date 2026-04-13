@@ -33,35 +33,23 @@
                             "name": "layers.${layer_index}.layer_scalar"
                         },
                         {
-                            "name": "layers.${layer_index}.self_attn.q_proj.weight",
-                            "aliases": [
-                                "layers.${layer_index}.self_attn.q_proj.linear.weight"
-                            ]
+                            "name": "layers.${layer_index}.self_attn.q_proj.weight"
                         },
                         {
                             "name": "layers.${layer_index}.self_attn.q_norm.weight"
                         },
                         {
-                            "name": "layers.${layer_index}.self_attn.k_proj.weight",
-                            "aliases": [
-                                "layers.${layer_index}.self_attn.k_proj.linear.weight"
-                            ]
+                            "name": "layers.${layer_index}.self_attn.k_proj.weight"
                         },
                         {
                             "name": "layers.${layer_index}.self_attn.k_norm.weight"
                         },
                         {
                             "name": "layers.${layer_index}.self_attn.v_proj.weight",
-                            "aliases": [
-                                "layers.${layer_index}.self_attn.v_proj.linear.weight"
-                            ],
                             "optional": true
                         },
                         {
-                            "name": "layers.${layer_index}.self_attn.o_proj.weight",
-                            "aliases": [
-                                "layers.${layer_index}.self_attn.o_proj.linear.weight"
-                            ]
+                            "name": "layers.${layer_index}.self_attn.o_proj.weight"
                         },
                         {
                             "name": "layers.${layer_index}.post_attention_layernorm.weight"
@@ -70,22 +58,13 @@
                             "name": "layers.${layer_index}.pre_feedforward_layernorm.weight"
                         },
                         {
-                            "name": "layers.${layer_index}.mlp.up_proj.weight",
-                            "aliases": [
-                                "layers.${layer_index}.mlp.up_proj.linear.weight"
-                            ]
+                            "name": "layers.${layer_index}.mlp.up_proj.weight"
                         },
                         {
-                            "name": "layers.${layer_index}.mlp.gate_proj.weight",
-                            "aliases": [
-                                "layers.${layer_index}.mlp.gate_proj.linear.weight"
-                            ]
+                            "name": "layers.${layer_index}.mlp.gate_proj.weight"
                         },
                         {
-                            "name": "layers.${layer_index}.mlp.down_proj.weight",
-                            "aliases": [
-                                "layers.${layer_index}.mlp.down_proj.linear.weight"
-                            ]
+                            "name": "layers.${layer_index}.mlp.down_proj.weight"
                         },
                         {
                             "name": "layers.${layer_index}.post_feedforward_layernorm.weight"
