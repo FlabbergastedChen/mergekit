@@ -1,15 +1,21 @@
 modules:
   text_decoder:
     models:
-      - model: google/gemma-4-31b-it
+      - model: /home/ubisec/cjr/models/mergerd/merged-gemma4-31b-it-cp-3954
         parameters:
           weight: 1
           density: 1
-
+    models:
+      - model: /home/ubisec/cjr/models/google/gemma-4-31B-it
+        parameters:
+          weight: 1
+          density: 1
 merge_method: ties
-base_model: google/gemma-4-31b
+base_model: /home/ubisec/cjr/models/google/gemma-4-31B
 parameters:
+  weight: 1
+  density: 1
   normalize: true
   int8_mask: true
-tokenizer_source: google/gemma-4-31b
+tokenizer_source: /home/ubisec/cjr/models/google/gemma-4-31B-it
 dtype: bfloat16
