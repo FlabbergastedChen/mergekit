@@ -16,6 +16,7 @@ def main():
     ap.add_argument("--model-name", required=True, help="vLLM服务里的模型名")
     ap.add_argument("--base-url", default="http://127.0.0.1:8000", help="vLLM地址")
     ap.add_argument("--prompt", default="介绍一下你自己，50字以内。")
+    ap.add_argument("--max-tokens", type=int, default=80, help="排查时建议先设小，避免跨轮继续生成")
     args = ap.parse_args()
 
     tok = AutoTokenizer.from_pretrained(args.model_path, trust_remote_code=True)
@@ -41,12 +42,25 @@ def main():
     url = f"{args.base_url.rstrip('/')}/v1/chat/completions"
     headers = {"Content-Type": "application/json"}
 
+    # Stop markers observed in Gemma turn/channel style templates.
+    template_stop = [
+        "<turn|>",
+        "<|turn>user",
+        "<|turn>model",
+        "<|channel>thought",
+        "<|channel>final",
+        "<channel|>",
+    ]
+    # Keep some common fallbacks for other templates.
+    legacy_stop = ["<end_of_turn>", "<eot_id>", "</s>", "<|eot_id|>"]
+    stop = template_stop + legacy_stop
+
     payload_no_stop = {
         "model": args.model_name,
         "messages": messages,
         "temperature": 0,
         "top_p": 1,
-        "max_tokens": 200
+        "max_tokens": args.max_tokens
     }
 
     payload_with_stop = {
@@ -54,8 +68,8 @@ def main():
         "messages": messages,
         "temperature": 0,
         "top_p": 1,
-        "max_tokens": 200,
-        "stop": ["<end_of_turn>", "<eot_id>", "</s>", "<|eot_id|>"]
+        "max_tokens": args.max_tokens,
+        "stop": stop
     }
 
     for tag, payload in [("no_stop", payload_no_stop), ("with_stop", payload_with_stop)]:
